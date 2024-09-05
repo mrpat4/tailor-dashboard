@@ -14,7 +14,7 @@ const PrivateRoute: FC<{
       if (isAuthenticated) {
         refreshAccessToken();
       }
-    }, 150 * 60 * 1000); // Refresh token every 15 minutes
+    }, 15 * 60 * 1000); // Refresh token every 15 minutes
 
     return () => clearInterval(interval);
   }, []);

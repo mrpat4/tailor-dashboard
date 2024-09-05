@@ -11,9 +11,16 @@ const configureAxios = () => {
   // Add a request interceptor to dynamically add the Authorization header
   axios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const { accessToken } = useTokenStore.getState();
-      if (accessToken) {
-        config.headers["Authorization"] = `Bearer ${accessToken}`;
+      const { accessToken, refreshToken } = useTokenStore.getState();
+      console.log("🚀 ~ configureAxios ~ url:", config.url);
+      if (config.url === apiEndpoints.host + apiEndpoints.refreshToken) {
+        if (refreshToken) {
+          config.headers["Authorization"] = `Bearer ${refreshToken}`;
+        }
+      } else {
+        if (accessToken) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
       }
       return config;
     },

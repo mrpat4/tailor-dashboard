@@ -33,14 +33,13 @@ export const useTokenStore = create<TokenState>((set) => ({
       const refreshToken = cookies.get("refreshToken");
       if (!refreshToken) throw new Error("No refresh token available");
 
-      const response = await axios.post(apiEndpoints.host + apiEndpoints.refreshToken, {
-        refreshToken,
-      });
-      const { accessToken, newRefreshToken } = response.data;
+      const response = await axios.post(apiEndpoints.host + apiEndpoints.refreshToken);
+      const { accessToken, refreshToken: newRefreshToken } = response.data;
+      console.log("🚀 ~ refreshAccessToken: ~ response:", response);
       cookies.set("accessToken", accessToken, { path: "/" });
       if (newRefreshToken) {
         cookies.set("refreshToken", newRefreshToken, { path: "/" });
-        set({ refreshToken: newRefreshToken });
+        set({ refreshToken: newRefreshToken, accessToken: accessToken });
       }
       set({ accessToken });
     } catch (error) {
